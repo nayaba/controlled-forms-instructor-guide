@@ -44,15 +44,9 @@ const App = () => {
 export default App;
 ```
 
-You may have noticed that the code to manage this form state is repetitive. 
+You may have noticed that the code to manage this form state is repetitive. Imagine what the `App` component would look like if our form had even more inputs. With this method, each would need its own state and its own event handler.
 
-Imagine what the `App` component would look like if our form had even more inputs.
-
-With this method, each would need its own state and its own event handler.
-
-Instead of having separate state items for each input, like `firstName` and `lastName`, we can consolidate them into a single state object.
-
-✨ Copy App.jsx and rename copy to MultiStateForm.jsx
+To streamline our code, we can refactor how we manage our state. Instead of having separate state items for each input, like `firstName` and `lastName`, we can consolidate them into a single state object. This approach also allows us to create a more versatile function that can be used for multiple input fields.
 
 First, let's change our state to the following:
 
@@ -149,23 +143,20 @@ Back to the `handleChange()` function from earlier:
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 ```
-> **How does the spread operator (...formData) help in this function?**
->
-> Creates a shallow copy of the existing state object, preserving the current values. This ensures that **only the relevant part of the state is updated**, while other values remain unchanged.
 
+**Note**: A couple of interesting things are happening here:
 
-> **What does [event.target.name] represent?**
->
-> [event.target.name] is a dynamic key that corresponds to the name attribute of the input element. It allows the handler function to update the correct property in the state object based on which input triggered the event.
+1. We use the spread operator to copy any values from the original state into the new object used to construct the new state. This way, when updating the `firstName` state, we don't lose the `lastName` state, and vice versa!
+2. `event.target.name` takes the value of the name prop in our input form. We're able to access the key dynamically through the use of square bracket notation.
 
 Let's break down the second point even further:
 
 ![Code breakdown](./assets/handle-change.png)
 
-1. This is the `formData` state.
-2. The value of the `name` prop aligns with the `firstName` property in the `formData` state. The `formData.firstName` state is used as the value of the input.
+1. This is the `formData` state. The `firstName` property is highlighted.
+2. The `<input>` element. The value of the `name` prop aligns with the `firstName` property in the `formData` state. The `formData.firstName` state is used as the value of the input.
 3. When a user changes the data in this input, the `[event.target.name]: event.target.value` code is executed. The value of the `<input>` element's `name` prop (`firstName`) is set as a key on the new `formData` state and has a value matching the new value.
-4. This is the result of the above
+4. This is the result of the above, assuming the user has typed `Alex` into the `<input name="firstName">` element.
 
 Typing the name "Sam" into the first name input would result in an event handler that is computed as the following:
 
