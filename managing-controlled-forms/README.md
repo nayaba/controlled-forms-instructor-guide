@@ -2,11 +2,12 @@
 
 **Learning objective:** By the end of this lesson, students will be able to create and manage a controlled form in React.
 
-## Add an input form to the `App` component
+## Now let's implement a more complex form.
 
-Now let's implement a controlled form in our application. A controlled form in React is a form where all the form elements within it (inputs, checkboxes, select dropdowns, etc.) are controlled by React state.
+✨ Copy App.jsx and rename copy to SimpleForm.jsx
 
-To get started, replace the existing code in `App.jsx` with this code:
+To get started, replace the existing code in `App.jsx` with this simple form:
+ 
 
 ```jsx
 // src/App.jsx
@@ -33,13 +34,13 @@ const App = () => {
 export default App;
 ```
 
-The header will be where the text from our form fields is rendered on the page. The form will contain a single text input. We'll modify the form and input as our needs change, but this is a good starting place.
+> **What state variables are necessary to manage this form?**
+>
+> `firstName` and `lastName` state variables.
 
 ## Add new state to track the input
 
-Once we have the form rendered, we can type values into it. Note that our component has no way of keeping track of the values we enter, so our next step will address this issue.
-
-To begin tracking the value, we need to establish state for the form input. Declare a new state variable called `firstName`.
+ Declare a new state variable called `firstName`.
 
 ```jsx
 // src/App.jsx
@@ -62,6 +63,10 @@ const App = () => {
 ```
 
 ## Connect state to the input field
+
+> **How do we ensure the input value is controlled by state?**
+>
+> By setting the input's `value` prop to the corresponding state variable.
 
 With state in place, add a `value` prop to the input and set its value to `firstName`:
 

@@ -4,49 +4,76 @@
 
 ## React's virtual DOM
 
-In web browsers, the DOM (Document Object Model) is like a map of a website's layout, where each part of the HTML structure is represented as nodes and objects. The virtual DOM, specific to React, is a lightweight, memory-based copy of the actual DOM, essentially a duplicate object managed by React.
 
-Traditional DOM manipulation requires manual state management through the use of event handlers, variables, and direct content updates. This is often complex and prone to sync issues between the app's state and what it displays based on that data.
+1. **Understanding the DOM:**
+   - The DOM (Document Object Model) is the browser's way of representing a webpage as a structured map, with each HTML element as a node.
 
-React's virtual DOM simplifies state management and maintains consistency between an application's state and the visual representation of that state.
+   > Draw a box on the left labeled "Real DOM."
+   > Inside the box, sketch a simplified tree structure with elements like `<div>`, `<h1>`, `<p>`, representing the structure of a webpage.
 
-Through a process called reconciliation, React updates the actual DOM to match the desired state as defined in the virtual DOM, enabling a more streamlined and declarative approach to UI development.
+2. **Virtual DOM Basics:**
+   - React uses a virtual DOM, a lightweight, in-memory representation of the real DOM. It acts as a mirror, keeping track of changes without directly affecting the actual DOM.
 
-### The React virtual DOM as an analogy
+   > Draw a box on the right labeled "Virtual DOM" and replicate the first tree
 
-Imagine that the UI of our React app is a giant skyscraper.
+3. **Benefits of the Virtual DOM:**
+   - **Simplified State Management:** React handles state changes efficiently, ensuring the UI reflects the current state without manual intervention.
+   - **Consistency:** It maintains synchronization between application state and visual output, reducing errors and simplifying development.
 
-The real DOM is the building and represents the elements and structure displayed on the screen. Any changes we make to the building would be time-consuming and cumbersome. We'd need to tear down and rebuild the skyscraper whenever we wanted to make any changes to the building. Sounds expensive.
+   > Draw a circle or box above the virtual DOM labeled "Component State/Props." --> Source of Truth
 
-React's virtual DOM is like a real-time holographic model of our skyscraper. Since it's just a hologram, we can easily manipulate and update. We can even make frequent changes to our holograph without changing the building itself.
+4. **Reconciliation Process:**
+   - React will compare the new virtual DOM (resulting from the updated state) with the previous virtual DOM; called reconciliation
+   - **When Reconciliation Occurs**
+        1. **State Updates:** triggers a re-render for that component. 
+        2. **Prop Changes:** can cause a re-render
 
-When changes ***do*** need to be made to our building, the virtual DOM allows React to make only the necessary updates efficiently. Rather than tearing down and rebuilding, our skyscraper is compared to the updated holograph, and the required changes are made to align the real skyscraper with the holograph.
+    > Between the virtual and real DOM, draw a box labeled "Diffing Algorithm."
 
-## Why controlled inputs and forms?
+ ### Flow
 
-Without using controlled inputs in React, when someone types into a form field, the browser keeps track of what's typed internally in its own memory. But this information isn't directly shared with our React component.
+1. **Initial Render**
+   - "Component State/Props" ---> "Virtual DOM" `Render with State/Props`
+   - "Virtual DOM" --> "Real DOM" `Initial Render`
 
-This leads to two main problems:
+2. **State/Prop Change**
+   - "Component State/Props" ---> "Virtual DOM" `State/Prop Change`
+   - **Change the virutal DOM somehow**
 
-- **Information flow is limited**: The data goes only one way – from the user typing to the browser storing it. Our React component isn't in the loop.
-- **Our app can't respond to changes**: The most recent input value isn't stored where the React component can access it. This inconsistency can cause issues when the component's state needs to reflect the current inputs for validation or processing. For example, if we wanted to include functionality like enabling a submit button only when certain conditions are met.
+3. **Reconciliation Process**
+   - `Apply Updates` "Real DOM" <--- "Diffing Algorithm" ---> "Virtual DOM" `Calculate Changes`
 
-To fix this, we use [controlled inputs](https://react.dev/reference/react-dom/components/input#controlling-an-input-with-a-state-variable). This technique lets our React component take control over the form inputs, ensuring it stays updated and can respond to every change the user makes.
 
-By using controlled inputs, we can implement complex form logic and interactions in a more straightforward way.
+---
 
-> 🧠 A controlled form in React is a form where all the form elements within it (inputs, checkboxes, select dropdowns, etc.) are controlled by React state.
+## Controlled Inputs and Forms in React
 
-### Controlling inputs in React
+   - Controlled inputs allow React components to manage form states directly, keeping input values synchronized with component state.
 
-When we use controlled inputs, the component state is the single source of truth. This ensures that the value of an input is always synchronized with state.
+   - An event handler updates the state with every keystroke, keeping the input field in sync with state changes.
 
-This means a handler function fires an event each time a user types a character, which updates state, which updates the input field. It's a complex cycle, but it gives React total control of each input field as a user interacts with it.
+   - The big advantage with forms is that you can validate with every keystroke (not _after_ the form has already been submitted)
 
-![Flow chart](./assets/flow-chart.png)
+### Visual Aid: Whiteboard Diagram
 
-This brings us back to the importance of the virtual DOM.
+**Title: Controlled Forms in React**
 
-For controlled inputs, the virtual DOM is vital because, each keystroke would trigger a DOM update without it. However, by using the virtual DOM, React batches updates and reduces the number of direct manipulations needed on the actual DOM. This is particularly important when handling forms with multiple inputs that might be updated rapidly or simultaneously.
+Draw a flowchart to illustrate the relationship between state, input elements, and handler functions.
 
-The virtual DOM plays a crucial role by ensuring that the actual DOM is always in sync with the component's state. When a user types into a controlled input, the input's state is updated, and the virtual DOM reconciles these changes with the actual DOM efficiently.
+1. **State Variable** 
+   - Draw a box labeled "State Variable" (e.g., `cityInput`) ---> "Input Element" `Value`
+   
+2. **Input Element**
+   - Draw a box labeled "Input Element" ---> "Handler Function" `onChange`
+
+3. **Handler Function**
+   - Draw a box labeled "Handler Function" (e.g., `handleChange`) ---> "State Variable" `Updates State`
+
+**Ask students**:  
+> **What role does state play in a controlled input?**
+>
+> State serves as the single source of truth for the input's value. It allows React to manage the input's value and ensures that any changes to the input are immediately reflected in the component's state.
+
+> **How does a handler function affect the input's state?**
+>
+> A handler function updates the input's state whenever the input's value changes. It captures the new value from the input and updates the state accordingly.
